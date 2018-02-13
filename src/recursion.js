@@ -307,6 +307,18 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+  var count = 0;
+  for (var item in obj){
+    if (obj.hasOwnProperty(item)){
+      if (typeof obj[item] === "object" && !Array.isArray(obj[item])){
+        count += countKeysInObj(obj[item], key)
+      }
+      if (item === key){
+        count++;
+      }
+    }
+  }
+  return count;
 };
 
 // 23. Write a function that counts the number of times a value occurs in an object.
@@ -429,4 +441,41 @@ var mergeSort = function(array) {
 // console.log(obj2); // {a:1,b:{bb:{bbb:2}},c:3}
 // obj1 === obj2 // false
 var clone = function(input) {
-};
+  if (Array.isArray(input)){
+    var arrayClone = [];
+    for (var i = 0; i < input.length; i++){
+      if (typeof input[i] === 'object'){
+        arrayClone.push(clone(input[i]));
+      } else {
+        arrayClone.push(input[i])
+      }
+    }
+    return arrayClone;
+
+  } else {
+    var result = {};
+    for (var key in input){
+      if (input.hasOwnProperty(key)){
+        if (typeof input[key] === "object" && !Array.isArray(input[key])){
+          result[key] = clone(input[key]);
+        } else {
+          result[key] = input[key]
+        }
+      }
+    }
+    return result;
+  }
+}
+
+
+  // if (Array.isArray(input)){
+  //   var arrayClone = [];
+  //   for (var i = 0; i < input.length; i++){
+  //     if (Array.isArray(input[i])){
+  //       arrayClone.push(clone(input[i]));
+  //     }
+  //     arrayClone.push(input[i])
+  //   }
+  // }
+  // return arrayClone;
+
